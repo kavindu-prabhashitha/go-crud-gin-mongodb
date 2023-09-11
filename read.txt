@@ -1,0 +1,41 @@
+https://codevoweb.com/api-golang-mongodb-gin-gonic-project-setup/
+
+
+JWSt Authentication
+
+users - get  - /api/users/me (return the logged-in user’s information)
+auth  - post - /api/auth/register	(Register a new user)
+auth  -	POST - /api/auth/login	(Login registered user)
+auth  - GET  - /api/auth/refresh	(Refresh expired access token)
+auth  -	GET	 - /api/auth/logout	(Logout user)
+
+features
+Register for a new account
+Login with the registered credentials
+Refresh the access token when expired
+Get profile information only if authenticated.
+RESOURCE	HTTP METHOD	ROUTE	DESCRIPTION
+
+
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrFc3n2Q3h1wxrLFHzF2/jSD2G
+JAB9FB5BPNLaHBZzdT/aRl+j6clsTTojNEwUDCAt4kUxK/kxNqcCUQZ/9CdqtGNz
+UlHayHiPwiGzKOiYnR5vxFVd1bX6ojMtJW13tVtIE1d+10Rjzb1JiX00qXXcxtTR
++gQQ8ZX12OTZgKz7PwIDAQAB
+-----END PUBLIC KEY-----
+
+-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQCrFc3n2Q3h1wxrLFHzF2/jSD2GJAB9FB5BPNLaHBZzdT/aRl+j
+6clsTTojNEwUDCAt4kUxK/kxNqcCUQZ/9CdqtGNzUlHayHiPwiGzKOiYnR5vxFVd
+1bX6ojMtJW13tVtIE1d+10Rjzb1JiX00qXXcxtTR+gQQ8ZX12OTZgKz7PwIDAQAB
+AoGBAKii8nZA/i0JQ0V0x0ZdaL1YnMRXQmAH75aQdKnnG74s6Yam7WjtbcyiBtdi
+mkb8eM+hhGBmnteCrnZbFZQUPrCRuuBsm54/Eq4yyXu2o3k0T0igXakY3+qtdQAv
+mtXU3niFzrjRVJR8w1RVxuiSaFlVQm8AkRjuA+MGw7miXTXhAkEA5f5Te7UhnrHu
+OAMUKXIfCJiwQQKIfY7ShvnPKN28kui/V9zAaI41DwaL+2JepFKpFQn0HE6lfhCK
+Z4HGd2uGLwJBAL5uPxJysHU42VLUknd5jP7NQlFw+C8jBGcrqjDgMC8pxgaLPzYC
+PlJia9XkWDljh2aPvjPQewBS9rmHX38Fp/ECQQCwpOA7sEeNGj3LmVm/5128fYFJ
+vQdV3/8EGhOo4H04HDjx46OH6kkILFARGGF2NeKVPRrXLvReWZfjncHv8I6TAkB+
+CxawLT1iuVgPHSg88DVEybNlmHKNMI5Pg3VImHsMHIg3+J7ELsP1X7OkhVln0tri
+Ja5tOUbQthkcP+ATgTjhAkBXJGUcVK83nTlpKOtWG1ZdomYH6x/Bxjc1kh/R95hC
+Vy0MoWHLH/tBk2PZqpGSKUrXAWOWvFBGHUZ8bX4Q01+1
+-----END RSA PRIVATE KEY-----

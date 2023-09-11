@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kavindu-prabhashitha/go-crud-gin-mongodb/config"
@@ -13,14 +14,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func init() {
+var (
+	server      *gin.Engine
+	ctx         context.Context
+	mongoclient *mongo.Client
+	redisclient *redis.Client
+)
 
-	var (
-		server      *gin.Engine
-		ctx         context.Context
-		mongoclient *mongo.Client
-		redisclient *redis.Client
-	)
+func init() {
 
 	config, err := config.LoadConfig(".")
 	if err != nil {
@@ -51,7 +52,7 @@ func init() {
 	if _, err := redisclient.Ping(ctx).Result(); err != nil {
 		panic(err)
 	}
-	err = redisclient.Set(ctx, "test", "Welcome to Golang with Redis and MongoDB",
+	err = redisclient.Set(ctx, "test", "Welcome to Golang with Redis and MongoDB. Hii",
 		0).Err()
 	if err != nil {
 		panic(err)
@@ -65,5 +66,26 @@ func init() {
 }
 
 func main() {
-	fmt.Print("This is the main.go file")
+	config, err := config.LoadConfig(".")
+
+	if err != nil {
+		log.Fatal("Could not load config", err)
+	}
+
+	defer mongoclient.Disconnect(ctx)
+
+	value, err := redisclient.Get(ctx, "name").Result()
+
+	if err == redis.Nil {
+		fmt.Println("key: test does not exist")
+	} else if err != nil {
+		panic(err)
+	}
+
+	router := server.Group("/api")
+	router.GET("/healthchecker", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": value})
+	})
+
+	log.Fatal(server.Run(":" + config.Port))
 }
