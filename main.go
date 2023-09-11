@@ -8,6 +8,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kavindu-prabhashitha/go-crud-gin-mongodb/config"
+	"github.com/kavindu-prabhashitha/go-crud-gin-mongodb/controllers"
+	"github.com/kavindu-prabhashitha/go-crud-gin-mongodb/routes"
+	"github.com/kavindu-prabhashitha/go-crud-gin-mongodb/services"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -19,6 +22,15 @@ var (
 	ctx         context.Context
 	mongoclient *mongo.Client
 	redisclient *redis.Client
+
+	userService         services.UserService
+	UserController      controllers.UserController
+	UserRouteController routes.UserRouteController
+
+	authCollection      *mongo.Collection
+	authService         services.AuthService
+	AuthController      controllers.AuthController
+	AuthRouteController routes.AuthRouteController
 )
 
 func init() {
@@ -62,6 +74,16 @@ func init() {
 	// ? Create the Gin Engine instance
 	server = gin.Default()
 
+	// Collections
+	authCollection = mongoclient.Database("golang_mongodb").Collection("users")
+	userService = services.NewUserServiceImpl(authCollection, ctx)
+	authService = services.NewAuthService(authCollection, ctx)
+	AuthController = controllers.NewAuthController(authService, userService)
+	AuthRouteController = routes.NewAuthRouteController(AuthController)
+
+	UserController = controllers.NewUserController(userService)
+	UserRouteController = routes.NewRouteUserController(UserController)
+
 	fmt.Print(config)
 }
 
@@ -73,7 +95,6 @@ func main() {
 	}
 
 	defer mongoclient.Disconnect(ctx)
-
 	value, err := redisclient.Get(ctx, "name").Result()
 
 	if err == redis.Nil {
@@ -86,6 +107,9 @@ func main() {
 	router.GET("/healthchecker", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": value})
 	})
+
+	AuthRouteController.AuthRoute(router, userService)
+	UserRouteController.UserRoute(router, userService)
 
 	log.Fatal(server.Run(":" + config.Port))
 }
